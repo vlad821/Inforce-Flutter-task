@@ -1,6 +1,5 @@
-# flutter_application_1
+# Flutter task
 
-Flutter task
 
 ## Getting Started
 I tried to create project using Provider as state managment. Also, I used http package that supports making HTTP requests.
