@@ -23,119 +23,129 @@ class _BookListScreenState extends State<BookListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Books'),
-        actions: [
-          Consumer<BookProvider>(
-            builder: (context, provider, child) => DropdownButton<SortingCriteria>(
-              value: provider.currentSortingCriteria,
-              onChanged: (criteria) {
-                provider.sortBooksBy(criteria!);
-              },
-              items: SortingCriteria.values
-                  .map<DropdownMenuItem<SortingCriteria>>(
-                    (criteria) => DropdownMenuItem<SortingCriteria>(
-                      value: criteria,
-                      child: Text(
-                        criteria.toString().split('.').last,
-                        style: const TextStyle(color: AppColors.textColor),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Books'),
+          actions: [
+            Consumer<BookProvider>(
+              builder: (context, provider, child) =>
+                  DropdownButton<SortingCriteria>(
+                value: provider.currentSortingCriteria,
+                onChanged: (criteria) {
+                  provider.sortBooksBy(criteria!);
+                },
+                items: SortingCriteria.values
+                    .map<DropdownMenuItem<SortingCriteria>>(
+                      (criteria) => DropdownMenuItem<SortingCriteria>(
+                        value: criteria,
+                        child: Text(
+                          criteria.toString().split('.').last,
+                          style: const TextStyle(color: AppColors.textColor),
+                        ),
                       ),
-                    ),
-                  )
-                  .toList(),
+                    )
+                    .toList(),
+              ),
             ),
-          ),
-        ],
-      ),
-      body: Consumer<BookProvider>(
-        builder: (context, provider, child) {
-          if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        decoration: InputDecoration(
-                          labelText: 'Add a book',
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.add),
-                            color: AppColors.addItemButtonColor,
-                            onPressed: () {
-                              if (_controller.text.isNotEmpty) {
-                                provider.addBook(Book(
-                                  id: DateTime.now().millisecondsSinceEpoch,
-                                  title: _controller.text,
-                                ));
-                                _controller.clear();
-                              }
-                            },
+          ],
+        ),
+        body: Consumer<BookProvider>(
+          builder: (context, provider, child) {
+            if (provider.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          cursorColor: AppColors.textColor,
+                          controller: _controller,
+                          decoration: InputDecoration(
+                            labelText: 'Add a book title',
+                            suffixIcon: IconButton(
+                              icon: const Icon(Icons.add),
+                              color: AppColors.addItemButtonColor,
+                              iconSize: 25,
+                              onPressed: () {
+                                if (_controller.text.isNotEmpty) {
+                                  provider.addBook(Book(
+                                    id: DateTime.now().millisecondsSinceEpoch,
+                                    title: _controller.text,
+                                  ));
+                                  _controller.clear();
+                                }
+                              },
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: provider.books.length,
-                  itemBuilder: (context, index) {
-                    final book = provider.books[index];
-                    return Card(
-                      color: AppColors.primaryColor,
-                      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: ListTile(
-                        title: Text(book.title),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          color: AppColors.deleteButtonColor,
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text('Confirm Delete'),
-                                content: Text('Are you sure you want to delete ${book.title}?'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      provider.removeBook(book);
-                                      Navigator.pop(context);
-                                    },
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: AppColors.deleteButtonColor,
-                                    ),
-                                    child: const Text(
-                                      'Delete',
-                                      style: TextStyle(color: AppColors.whiteColor),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: provider.books.length,
+                    itemBuilder: (context, index) {
+                      final book = provider.books[index];
+                      return Card(
+                        color: AppColors.primaryColor,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 4.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                      ),
-                    );
-                  },
+                        child: ListTile(
+                          title: Text(book.title),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete),
+                            color: AppColors.deleteButtonColor,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Confirm Delete'),
+                                  content: Text(
+                                      'Are you sure you want to delete ${book.title}?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        provider.removeBook(book);
+                                        Navigator.pop(context);
+                                      },
+                                      style: TextButton.styleFrom(
+                                        backgroundColor:
+                                            AppColors.deleteButtonColor,
+                                      ),
+                                      child: const Text(
+                                        'Delete',
+                                        style: TextStyle(
+                                            color: AppColors.whiteColor),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }
