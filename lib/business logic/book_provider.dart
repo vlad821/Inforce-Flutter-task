@@ -39,7 +39,7 @@ class BookProvider with ChangeNotifier {
   Future<void> fetchBooks() async {
     setLoading(true);
     try {
-      _books = await ApiService().fetchBooks(); // Fetch all books from ApiService
+      _books = await ApiService().fetchBooks(); 
       _sortBooks();
     } catch (e) {
       print('Error fetching books: $e');
