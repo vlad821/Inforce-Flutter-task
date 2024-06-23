@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/business%20logic/book_provider.dart';
-import 'package:flutter_application_1/presentation/home_screen.dart';
+import 'package:flutter_application_1/presentation/book_list_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -17,13 +17,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Book List App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const BookListScreen(),
+      home: BookListScreen(),
     );
   }
 }
