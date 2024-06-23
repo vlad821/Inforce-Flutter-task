@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_application_1/model/book_model.dart';
-import 'package:flutter_application_1/services/api_service.dart';
+import 'package:flutter_application_1/business%20logic/services/api_service.dart';
 import 'sorting_helper.dart';
 
 class BookProvider with ChangeNotifier {
@@ -42,7 +42,9 @@ class BookProvider with ChangeNotifier {
       _books = await ApiService().fetchBooks(); 
       _sortBooks();
     } catch (e) {
-      print('Error fetching books: $e');
+      if (kDebugMode) {
+        print('Error fetching books: $e');
+      }
     } finally {
       setLoading(false);
     }
